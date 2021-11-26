@@ -14,6 +14,7 @@ resource "aws_timestreamwrite_database" "hd_price_database" {
 
 resource "aws_timestreamwrite_table" "hd_prices" {
     database_name = aws_timestreamwrite_database.hd_price_database.database_name
+    table_name = "hd-prices"
 
     retention_properties {
       magnetic_store_retention_period_in_days = 1825

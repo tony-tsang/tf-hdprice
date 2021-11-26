@@ -1,13 +1,12 @@
 resource "aws_kms_key" "hd_price_timestream_kms" {
     description = "TimeStream encryption key"
-    key_usagge = "ENCRYPT_DECRYPT"
+    key_usage = "ENCRYPT_DECRYPT"
     multi_region = false
 }
 
 resource "aws_timestreamwrite_database" "hd_price_database" {
     database_name = "hd-price"
-    kms_key_id = aws_kms_key.hd_price_timestream_kms
-
+    kms_key_id = aws_kms_key.hd_price_timestream_kms.arn
     tags = {
         Name = "hd-price"
     }

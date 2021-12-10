@@ -90,14 +90,14 @@ resource "aws_iam_role" "role_for_hd_price" {
         "logs:PutLogEvents"
       ],
       "Resource": [
-        ${aws_cloudwatch_log_group.hd_price_log_group.arn}
+        "${aws_cloudwatch_log_group.hd_price_log_group.arn}"
       ]
     },
     {
       "Effect": "Allow",
       "Action": "timestream:WriteRecords",
       "Resource": [
-         ${aws_timestreamwrite_table.hd_prices.arn}
+         "${aws_timestreamwrite_table.hd_prices.arn}"
       ]
     }
   ]

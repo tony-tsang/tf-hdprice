@@ -81,24 +81,7 @@ resource "aws_iam_role" "role_for_hd_price" {
         "Service": "lambda.amazonaws.com"
       },
       "Effect": "Allow",
-      "Sid": ""
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Resource": [
-        "${aws_cloudwatch_log_group.hd_price_log_group.arn}"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": "timestream:WriteRecords",
-      "Resource": [
-         "${aws_timestreamwrite_table.hd_prices.arn}"
-      ]
+      "Resource": "arn:aws:iam::570549378524:user/robot-user"
     }
   ]
 }

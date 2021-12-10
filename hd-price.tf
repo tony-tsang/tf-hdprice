@@ -69,6 +69,10 @@ resource "aws_cloudwatch_log_group" "hd_price_log_group" {
     # kms_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
 }
 
+data "aws_iam_user" "robot_user" {
+    user_name = "robot-user"
+}
+
 resource "aws_iam_role" "role_for_hd_price" {
     name = "hd-price-role"
     assume_role_policy = <<EOF
@@ -81,7 +85,8 @@ resource "aws_iam_role" "role_for_hd_price" {
         "Service": "lambda.amazonaws.com"
       },
       "Effect": "Allow",
-      "Resource": "arn:aws:iam::570549378524:user/robot-user"
+      "Resource": "${aws_iam_user.robot_user.arn}",
+      "Sid": "assume-role"
     }
   ]
 }

@@ -57,7 +57,7 @@ resource "aws_lambda_function" "fetch_price" {
     s3_key = aws_s3_bucket_object.fetcher_code.id
     architectures = ["arm64"]
     memory_size = "128"
-    runtime = "nodejs12.0"
+    runtime = "nodejs14.x"
     timeout = "300"
     role = aws_iam_role.role_for_hd_price.arn
 }

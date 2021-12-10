@@ -53,8 +53,8 @@ resource "aws_s3_bucket_object" "fetcher_code" {
 
 resource "aws_lambda_function" "fetch_price" {
     function_name = "hd-price"
-    s3_bucket = aws_s3_bucket.code_bucket.id
-    s3_key = aws_s3_bucket_object.fetcher_code.id
+    s3_bucket = "code.tonytsang.com"
+    s3_key = "hdprice.zip"
     architectures = ["arm64"]
     memory_size = "128"
     runtime = "nodejs14.x"

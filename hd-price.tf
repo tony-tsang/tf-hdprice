@@ -1,6 +1,6 @@
 resource "aws_kms_key" "hd_price_timestream_kms" {
     description = "TimeStream encryption key"
-    alias = 
+    alias = "hd-price"
     key_usage = "ENCRYPT_DECRYPT"
     multi_region = false
 }

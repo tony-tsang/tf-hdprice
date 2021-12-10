@@ -108,7 +108,7 @@ EOF
 resource "aws_cloudwatch_event_rule" "trigger_daily" {
     name = "daily-fetch-hd-price"
     description = "Fetch hd prices daily"
-    schedule_expression = "cron(0 12 * * *)"
+    schedule_expression = "cron(0 12 * * * *)"
 }
 
 resource "aws_cloudwatch_event_target" "trigger_target" {

@@ -85,7 +85,7 @@ resource "aws_iam_role" "role_for_hd_price" {
         "Service": "lambda.amazonaws.com"
       },
       "Effect": "Allow",
-      "Resource": "${aws_iam_user.robot_user.arn}",
+      "Resource": "${data.aws_iam_user.robot_user.arn}",
       "Sid": "assume-role"
     }
   ]

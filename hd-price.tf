@@ -31,21 +31,21 @@ resource "aws_timestreamwrite_table" "hd_prices" {
     }
 }
 
-resource "aws_s3_bucket" "code_bucket" {
-    bucket = "code.tonytsang.com"
-    acl = "private"
+# resource "aws_s3_bucket" "code_bucket" {
+#     bucket = "code.tonytsang.com"
+#     acl = "private"
 
-    tags = {
-        Name = "Code Bucket"
-    }
+#     tags = {
+#         Name = "Code Bucket"
+#     }
 
-    versioning {
-        enabled = true
-    }
-}
+#     versioning {
+#         enabled = true
+#     }
+# }
 
 resource "aws_s3_bucket_object" "fetcher_code" {
-    bucket = aws_s3_bucket.code_bucket.id
+    bucket = "code.tonytsang.com"
     key = "hdprice.zip"
     server_side_encryption = "aws:kms"
     kms_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
@@ -66,7 +66,7 @@ resource "aws_lambda_function" "fetch_price" {
 resource "aws_cloudwatch_log_group" "hd_price_log_group" {
     name = "/aws/lambda/hd-price"
     retention_in_days = "30"
-    kms_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
+    # kms_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
 }
 
 resource "aws_iam_role" "role_for_hd_price" {

@@ -5,7 +5,7 @@ resource "aws_kms_key" "hd_price_timestream_kms_key" {
 }
 
 resource "aws_kms_alias" "hd_price_timestream_alias" {
-    name = "hd-price"
+    name = "alias/hd-price"
     target_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
 }
 
@@ -52,13 +52,14 @@ resource "aws_s3_bucket_object" "fetcher_code" {
 }
 
 resource "aws_lambda_function" "fetch_price" {
+    function_name = "hd-price"
     s3_bucket = aws_s3_bucket.code_bucket.id
     s3_key = aws_s3_bucket_object.fetcher_code.id
     architectures = ["arm64"]
     memory_size = "128"
     runtime = "nodejs12.0"
     timeout = "300"
-
+    role = aws_iam_role.role_for_hd_price.arn
 }
 
 resource "aws_cloudwatch_log_group" "hd_price_log_group" {

@@ -44,12 +44,12 @@ resource "aws_timestreamwrite_table" "hd_prices" {
 #     }
 # }
 
-resource "aws_s3_bucket_object" "fetcher_code" {
-    bucket = "code.tonytsang.com"
-    key = "hdprice.zip"
-    server_side_encryption = "aws:kms"
-    kms_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
-}
+# resource "aws_s3_bucket_object" "fetcher_code" {
+#     bucket = "code.tonytsang.com"
+#     key = "hdprice.zip"
+#     server_side_encryption = "aws:kms"
+#     kms_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
+# }
 
 resource "aws_lambda_function" "fetch_price" {
     function_name = "hd-price"
@@ -108,7 +108,7 @@ EOF
 resource "aws_cloudwatch_event_rule" "trigger_daily" {
     name = "daily-fetch-hd-price"
     description = "Fetch hd prices daily"
-    schedule_expression = "cron(0 12 * * * *)"
+    schedule_expression = "cron(0 12 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "trigger_target" {

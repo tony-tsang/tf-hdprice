@@ -1,12 +1,16 @@
-resource "aws_kms_key" "hd_price_timestream_kms_key" {
-    description = "TimeStream encryption key"
-    key_usage = "ENCRYPT_DECRYPT"
-    multi_region = false
-}
+# resource "aws_kms_key" "hd_price_timestream_kms_key" {
+#     description = "TimeStream encryption key"
+#     key_usage = "ENCRYPT_DECRYPT"
+#     multi_region = false
+# }
 
-resource "aws_kms_alias" "hd_price_timestream_alias" {
-    name = "alias/hd-price"
-    target_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
+# resource "aws_kms_alias" "hd_price_timestream_alias" {
+#     name = "alias/hd-price"
+#     target_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
+# }
+
+data "aws_kms_key" "hd_price_timestream_kms_key" {
+    key_id = "alias/hd-price"
 }
 
 resource "aws_timestreamwrite_database" "hd_price_database" {

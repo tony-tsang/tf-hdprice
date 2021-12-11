@@ -75,22 +75,19 @@ data "aws_iam_user" "robot_user" {
 
 resource "aws_iam_role" "role_for_hd_price" {
     name = "hd-price-role"
-    assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Resource": "${data.aws_iam_user.robot_user.arn}",
-      "Sid": ""
-    }
-  ]
-}
-EOF
+    assume_role_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [
+            {
+                Action = "sts:AssumeRole"
+                Effect = "Allow"
+                Sid    = ""
+                Principal = {
+                    Service = "lambda.amazonaws.com"
+                }
+            }
+        ]
+    })
 }
 
 resource "aws_cloudwatch_event_rule" "trigger_daily" {

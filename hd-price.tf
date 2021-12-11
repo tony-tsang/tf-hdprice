@@ -70,7 +70,7 @@ resource "aws_lambda_function" "fetch_price" {
 resource "aws_cloudwatch_log_group" "hd_price_log_group" {
     name = "/aws/lambda/hd-price"
     retention_in_days = "30"
-    kms_key_id = data.aws_kms_key.hd_price_timestream_kms_key.arn
+    # kms_key_id = data.aws_kms_key.hd_price_timestream_kms_key.arn
 }
 
 data "aws_iam_user" "robot_user" {

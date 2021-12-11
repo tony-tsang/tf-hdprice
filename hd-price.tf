@@ -86,7 +86,7 @@ resource "aws_iam_role" "role_for_hd_price" {
       },
       "Effect": "Allow",
       "Resource": "${data.aws_iam_user.robot_user.arn}",
-      "Sid": "assume-role"
+      "Sid": ""
     }
   ]
 }

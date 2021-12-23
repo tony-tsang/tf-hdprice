@@ -103,4 +103,13 @@ resource "aws_cloudwatch_event_rule" "trigger_daily" {
 resource "aws_cloudwatch_event_target" "trigger_target" {
     arn = aws_lambda_function.fetch_price.arn
     rule = aws_cloudwatch_event_rule.trigger_daily.id
+    target_id = "fetch_price"
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_trigger" {
+    statement_id = "AllowExecutionFromCloudWatch"
+    action = "lambda:InvokeFunction"
+    function_name = aws_lambda_function.fetch_price.function_name
+    principal = "events.amazonaws.com"
+    source_arn = aws_cloudwatch_event_rule.trigger_daily.arn
 }

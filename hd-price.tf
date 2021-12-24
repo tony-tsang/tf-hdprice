@@ -94,6 +94,26 @@ resource "aws_iam_role" "role_for_hd_price" {
     })
 }
 
+resource "aws_iam_role_policy" "permissions_for_hd_price_role" {
+    name = "hd-price-policy"
+    role = aws_iam_role.role_for_hd_price.id
+
+    policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [
+            {
+                Action = [
+                    "timestream:Select",
+                    "timestream:SelectValues",
+                    "timestream:WriteRecords"
+                ]
+                Effect = "Allow"
+                Resource = "*"
+            }
+        ]
+    })
+}
+
 resource "aws_cloudwatch_event_rule" "trigger_daily" {
     name = "daily-fetch-hd-price"
     description = "Fetch hd prices daily"
@@ -102,12 +122,12 @@ resource "aws_cloudwatch_event_rule" "trigger_daily" {
 
 resource "aws_cloudwatch_event_target" "trigger_target" {
     arn = aws_lambda_function.fetch_price.arn
-    rule = aws_cloudwatch_event_rule.trigger_daily.id
+    rule = aws_cloudwatch_event_rule.trigger_daily.name
     target_id = "fetch_price"
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_trigger" {
-    statement_id = "AllowExecutionFromCloudWatch"
+    statement_id = "AllowExecutionFromEventBridge"
     action = "lambda:InvokeFunction"
     function_name = aws_lambda_function.fetch_price.function_name
     principal = "events.amazonaws.com"

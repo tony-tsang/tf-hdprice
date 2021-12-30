@@ -117,7 +117,7 @@ resource "aws_iam_role_policy" "permissions_for_hd_price_role" {
 resource "aws_cloudwatch_event_rule" "trigger_daily" {
     name = "daily-fetch-hd-price"
     description = "Fetch hd prices daily"
-    schedule_expression = "cron(0 12 * * ? *)"
+    schedule_expression = "cron(0 0 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "trigger_target" {

@@ -105,7 +105,11 @@ resource "aws_iam_role_policy" "permissions_for_hd_price_role" {
                 Action = [
                     "timestream:Select",
                     "timestream:SelectValues",
-                    "timestream:WriteRecords"
+                    "timestream:WriteRecords",
+                    "timestream:ListMeasures",
+                    "timestream:ListTables",
+                    "timestream:ListDataabses",
+                    "timestream:DescribeEndpoints"
                 ]
                 Effect = "Allow"
                 Resource = "*"

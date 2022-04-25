@@ -1,23 +1,16 @@
-# resource "aws_kms_key" "hd_price_timestream_kms_key" {
-#     description = "TimeStream encryption key"
-#     key_usage = "ENCRYPT_DECRYPT"
-#     multi_region = false
-# }
-
-# resource "aws_kms_alias" "hd_price_timestream_alias" {
-#     name = "alias/hd-price"
-#     target_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
-# }
+locals {
+    function_name = "hd-price"
+}
 
 data "aws_kms_key" "hd_price_timestream_kms_key" {
-    key_id = "alias/hd-price"
+    key_id = "alias/${local.function_name}"
 }
 
 resource "aws_timestreamwrite_database" "hd_price_database" {
-    database_name = "hd-price"
+    database_name = local.function_name
     kms_key_id = data.aws_kms_key.hd_price_timestream_kms_key.arn
     tags = {
-        Name = "hd-price"
+        Name = local.function_name
     }
 }
 
@@ -35,28 +28,8 @@ resource "aws_timestreamwrite_table" "hd_prices" {
     }
 }
 
-# resource "aws_s3_bucket" "code_bucket" {
-#     bucket = "code.tonytsang.com"
-#     acl = "private"
-
-#     tags = {
-#         Name = "Code Bucket"
-#     }
-
-#     versioning {
-#         enabled = true
-#     }
-# }
-
-# resource "aws_s3_bucket_object" "fetcher_code" {
-#     bucket = "code.tonytsang.com"
-#     key = "hdprice.zip"
-#     server_side_encryption = "aws:kms"
-#     kms_key_id = aws_kms_key.hd_price_timestream_kms_key.arn
-# }
-
 resource "aws_lambda_function" "fetch_price" {
-    function_name = "hd-price"
+    function_name = local.function_name
     s3_bucket = "code.tonytsang.com"
     s3_key = "hdprice.zip"
     architectures = ["arm64"]
@@ -65,10 +38,14 @@ resource "aws_lambda_function" "fetch_price" {
     handler = "index.handler"
     timeout = "300"
     role = aws_iam_role.role_for_hd_price.arn
+
+    depends_on = [
+
+    ]
 }
 
 resource "aws_cloudwatch_log_group" "hd_price_log_group" {
-    name = "/aws/lambda/hd-price"
+    name = "/aws/lambda/${local.function_name}"
     retention_in_days = "30"
     # kms_key_id = data.aws_kms_key.hd_price_timestream_kms_key.arn
 }
@@ -109,7 +86,10 @@ resource "aws_iam_role_policy" "permissions_for_hd_price_role" {
                     "timestream:ListMeasures",
                     "timestream:ListTables",
                     "timestream:ListDataabses",
-                    "timestream:DescribeEndpoints"
+                    "timestream:DescribeEndpoints",
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
                 ]
                 Effect = "Allow"
                 Resource = "*"

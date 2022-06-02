@@ -34,7 +34,7 @@ resource "aws_lambda_function" "fetch_price" {
     s3_key = "hdprice.zip"
     architectures = ["arm64"]
     memory_size = "128"
-    runtime = "nodejs14.x"
+    runtime = "nodejs16.x"
     handler = "index.handler"
     timeout = "300"
     role = aws_iam_role.role_for_hd_price.arn
